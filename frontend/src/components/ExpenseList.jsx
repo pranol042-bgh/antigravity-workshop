@@ -30,8 +30,12 @@ const ExpenseList = ({ expenses }) => {
                                     {new Date(expense.createdAt).toLocaleDateString()} • {expense.category}
                                 </div>
                             </div>
-                            <div style={{ fontWeight: 700, fontSize: '1.25rem', color: 'var(--success-color)' }}>
-                                -{parseFloat(expense.amount).toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}
+                            <div style={{
+                                fontWeight: 700,
+                                fontSize: '1.25rem',
+                                color: expense.type === 'income' ? '#10b981' : '#ef4444'
+                            }}>
+                                {expense.type === 'income' ? '+' : '-'}{parseFloat(expense.amount).toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}
                             </div>
                         </div>
                     ))}

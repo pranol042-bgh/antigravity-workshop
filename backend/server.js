@@ -26,13 +26,14 @@ app.get('/api/expenses', async (req, res) => {
 
 // Create a new expense
 app.post('/api/expenses', async (req, res) => {
-  const { description, amount, category } = req.body;
+  const { description, amount, category, type } = req.body;
   try {
     const newExpense = await prisma.expense.create({
       data: {
         description,
         amount: parseFloat(amount),
         category,
+        type: type || 'expense',
       },
     });
     res.json(newExpense);

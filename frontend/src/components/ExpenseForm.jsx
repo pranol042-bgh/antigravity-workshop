@@ -4,6 +4,7 @@ const ExpenseForm = ({ onAddExpense }) => {
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
     const [category, setCategory] = useState('');
+    const [type, setType] = useState('expense');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -17,7 +18,7 @@ const ExpenseForm = ({ onAddExpense }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ description, amount, category }),
+                body: JSON.stringify({ description, amount, category, type }),
             });
 
             if (response.ok) {
@@ -36,8 +37,24 @@ const ExpenseForm = ({ onAddExpense }) => {
 
     return (
         <div className="card">
-            <h2 style={{ marginTop: 0, marginBottom: '1.5rem' }}>Add New Expense</h2>
+            <h2 style={{ marginTop: 0, marginBottom: '1.5rem' }}>Add New Transaction</h2>
             <form onSubmit={handleSubmit}>
+                <div className="input-group">
+                    <label className="input-label">Type</label>
+                    <select
+                        className="input-field"
+                        value={type}
+                        onChange={(e) => {
+                            setType(e.target.value);
+                            setCategory(''); // Reset category when type changes
+                        }}
+                        required
+                    >
+                        <option value="expense">Expense</option>
+                        <option value="income">Income</option>
+                    </select>
+                </div>
+
                 <div className="input-group">
                     <label className="input-label">Description</label>
                     <input
@@ -45,7 +62,7 @@ const ExpenseForm = ({ onAddExpense }) => {
                         className="input-field"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="e.g. Lunch at Cafe"
+                        placeholder={type === 'income' ? 'e.g. Salary' : 'e.g. Lunch at Cafe'}
                         required
                     />
                 </div>
@@ -72,11 +89,23 @@ const ExpenseForm = ({ onAddExpense }) => {
                         required
                     >
                         <option value="">Select Category</option>
-                        <option value="Food">Food</option>
-                        <option value="Transport">Transport</option>
-                        <option value="Utilities">Utilities</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Other">Other</option>
+                        {type === 'expense' ? (
+                            <>
+                                <option value="Food">Food</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Other">Other</option>
+                            </>
+                        ) : (
+                            <>
+                                <option value="Salary">Salary</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Investment">Investment</option>
+                                <option value="Gift">Gift</option>
+                                <option value="Other">Other</option>
+                            </>
+                        )}
                     </select>
                 </div>
 
@@ -86,7 +115,7 @@ const ExpenseForm = ({ onAddExpense }) => {
                     style={{ width: '100%', marginTop: '1rem' }}
                     disabled={loading}
                 >
-                    {loading ? 'Saving...' : 'Add Expense'}
+                    {loading ? 'Saving...' : `Add ${type === 'income' ? 'Income' : 'Expense'}`}
                 </button>
             </form>
         </div>
