@@ -11,7 +11,7 @@ function App() {
 
   const fetchExpenses = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/expenses');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/expenses`);
       if (response.ok) {
         const data = await response.json();
         setExpenses(data);
